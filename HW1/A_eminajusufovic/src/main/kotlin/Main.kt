@@ -3,8 +3,25 @@ interface Person {
     fun country(): String
 }
 
+
 open class Developer (val firstName : String, val lastName : String, val yearsOfExp : Int,
-    val country : String, val lang : List<String>) : Person {
+                      val country : String, val lang : List<String>) : Person {
+    init {
+
+        if (firstName.isBlank() || lastName.isBlank()){
+            throw Throwable ("First name and last name can not be blank!")
+        }
+        if (yearsOfExp < 0){
+            throw Throwable ("Years of experience can not be negative!")
+        }
+        if(lang.isEmpty()){
+            throw Throwable("List of languages can not be empyt!")
+        }
+    }
+
+
+
+
 
     override fun fullName() = "$firstName $lastName"
     override fun country() = country
