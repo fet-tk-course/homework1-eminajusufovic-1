@@ -41,6 +41,18 @@ fun devInfo(dev : Developer){
         role = "N/A"
     }
 
+    val framework : String
+    if (dev is BackendDeveloper){
+        framework = dev.backendFramework
+    }else if (dev is FrontendDeveloper){
+        framework = dev.frontendFramework
+    }else {
+        framework = "N/A"
+    }
+
+    println("${dev.fullName()} — $role — jezici: ${dev.lang.joinToString(", ")} — framework: $framework")
+
+
 
 }
 
