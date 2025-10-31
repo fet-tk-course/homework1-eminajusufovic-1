@@ -56,6 +56,18 @@ fun countDeveloperManual(developers: List<Developer>): Map<String, Int> {
     return map
 }
 
+fun avgExpeByLanguage(developers: List<Developer>): Map<String, Double> {
+    return developers
+        .groupBy { dev -> dev.languages }
+        .flatMap { (langs, devs) ->
+            langs.map { lang ->
+                lang to devs.map { it.yearsOfExp }.average()
+            }
+        }
+        .toMap()
+}
+
+
 fun devInfo(dev : Developer){
     val role : String
     if (dev is BackendDeveloper){
@@ -93,10 +105,21 @@ fun main (){
     developers.forEach { devInfo(it) }
 
     println("Counting languages (groupBy)")
-    developers.forEach { countDeveloper( developers) }
+    val countGroupBy = countDeveloper(developers)
+    for (entry in countGroupBy) {
+        println("${entry.key}: ${entry.value} developers")
+    }
 
     println("Counting languages (manual)")
-    developers.forEach { countDeveloperManual(developers) }
+    val manualDev= countDeveloperManual(developers)
+    for (entry in manualDev){
+        println("${entry.key}: ${entry.value} developers")
+    }
+    print("Average experience by language (groupBy)")
+    val avgExp= avgExpeByLanguage(developers)
+    for (entry in avgExp){
+        println("${entry.key}: ${entry.value} years")
+    }
 
 
 
