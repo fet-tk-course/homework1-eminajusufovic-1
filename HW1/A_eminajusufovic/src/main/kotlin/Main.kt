@@ -67,7 +67,22 @@ fun avgExpeByLanguage(developers: List<Developer>): Map<String, Double> {
         .toMap()
 }
 
+fun avgExpManual (developers: List<Developer>) : Map<String, Double> {
+    val manualMap = mutableMapOf<String, MutableList<Int>>()
+    for(dev in developers){
+        for(lang in dev.languages){
+            val years = manualMap.getOrPut(lang) {mutableListOf()}
+            years.add(dev.yearsOfExp)
 
+        }
+    }
+    val avg = mutableMapOf<String, Double>()
+    for ((lang, list) in manualMap){
+
+        avg[lang] = list.average()
+}
+    return avg
+}
 fun devInfo(dev : Developer){
     val role : String
     if (dev is BackendDeveloper){
@@ -115,11 +130,18 @@ fun main (){
     for (entry in manualDev){
         println("${entry.key}: ${entry.value} developers")
     }
-    print("Average experience by language (groupBy)")
+    println("Average experience by language (groupBy)")
     val avgExp= avgExpeByLanguage(developers)
     for (entry in avgExp){
         println("${entry.key}: ${entry.value} years")
     }
+
+    println("Average experience by language (manual)")
+        val avgExpM = avgExpManual(developers)
+        for (entry in avgExpM) {
+            println("${entry.key}: ${entry.value} years")
+        }
+
 
 
 
