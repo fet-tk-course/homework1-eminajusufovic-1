@@ -6,22 +6,20 @@ interface Person {
 
 open class Developer (val firstName : String, val lastName : String, val yearsOfExp : Int,
                       val country : String, val lang : List<String>) : Person {
-    init {
 
-        if (firstName.isBlank() || lastName.isBlank()){
-            throw Throwable ("First name and last name can not be blank!")
+    init {
+        if (firstName.isBlank() || lastName.isBlank()) {
+            throw Throwable("First name and last name can not be blank!")
         }
-        if (yearsOfExp < 0){
-            throw Throwable ("Years of experience can not be negative!")
+        if (yearsOfExp < 0) {
+            throw Throwable("Years of experience can not be negative!")
         }
-        if(lang.isEmpty()){
-            throw Throwable("List of languages can not be empyt!")
+        if (lang.isEmpty()) {
+            throw Throwable("List of languages can not be empty!")
         }
     }
 
-
-
-
+    val languages: List<String> = lang.map { it.lowercase() }
 
     override fun fullName() = "$firstName $lastName"
     override fun country() = country
@@ -41,11 +39,21 @@ class FrontendDeveloper (firstName: String, lastName: String, yearsOfExp: Int,
 }
 
 fun countDeveloper(developers: List<Developer>): Map<String, Int> {
-    val allLanguages = developers.flatMap { dev -> dev.lang }
-    val languageGrouping = allLanguages.groupingBy { language -> language }
-    val languageCount = languageGrouping.eachCount()
-    return languageCount
+    return developers
+        .flatMap { it.languages }
+        .groupingBy { it }
+        .eachCount()
 
+}
+
+fun countDeveloperManual(developers: List<Developer>): Map<String, Int> {
+    val map = mutableMapOf<String, Int>()
+    for (dev in developers){
+        for (lang in dev.languages){
+            map[lang] = map.getOrDefault(lang,0)+1
+        }
+    }
+    return map
 }
 
 fun devInfo(dev : Developer){
@@ -83,6 +91,12 @@ fun main (){
 
     println("All developers")
     developers.forEach { devInfo(it) }
+
+    println("Counting languages (groupBy)")
+    developers.forEach { countDeveloper( developers) }
+
+    println("Counting languages (manual)")
+    developers.forEach { countDeveloperManual(developers) }
 
 
 
