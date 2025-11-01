@@ -9,14 +9,18 @@ open class Developer (val firstName : String, val lastName : String, val yearsOf
 
     init {
         if (firstName.isBlank() || lastName.isBlank()) {
-            throw Throwable("First name and last name can not be blank!")
+            throw IllegalArgumentException("First name and last name can not be blank!")
         }
         if (yearsOfExp < 0) {
-            throw Throwable("Years of experience can not be negative!")
+            throw IllegalArgumentException("Years of experience can not be negative!")
         }
         if (lang.isEmpty()) {
-            throw Throwable("List of languages can not be empty!")
+            throw IllegalArgumentException("List of languages can not be empty!")
         }
+        // Napomena: Na početku sam koristila `throw Throwable`, što je radilo,
+        // ali ChatGPT mi je predložio da je bolje koristiti `IllegalArgumentException`
+        // za provjere ovakvih neispravnih podataka.
+
     }
 
     val languages: List<String> = lang.map { it.lowercase() }
@@ -24,14 +28,14 @@ open class Developer (val firstName : String, val lastName : String, val yearsOf
     override fun fullName() = "$firstName $lastName"
     override fun country() = country
 }
-class BackendDeveloper (firstName: String, lastName: String, yearsOfExp: Int,
+class backendDeveloper (firstName: String, lastName: String, yearsOfExp: Int,
                         country: String, lang: List<String>, val backendFramework : String) : Developer(
                             firstName, lastName, yearsOfExp, country, lang
                         ){
 
 }
 
-class FrontendDeveloper (firstName: String, lastName: String, yearsOfExp: Int,
+class frontendDeveloper (firstName: String, lastName: String, yearsOfExp: Int,
                         country: String, lang: List<String>, val frontendFramework : String) : Developer(
                             firstName, lastName, yearsOfExp, country, lang
                         ){
@@ -89,8 +93,8 @@ fun avgExpManual (developers: List<Developer>) : Map<String, Double> {
 fun filterByFramework (developers: List<Developer>, framework : String) : List<Developer>{
     return developers.filter { dev ->
         when (dev) {
-            is BackendDeveloper -> dev.backendFramework == framework
-            is FrontendDeveloper -> dev.frontendFramework == framework
+            is backendDeveloper -> dev.backendFramework == framework
+            is frontendDeveloper -> dev.frontendFramework == framework
             else -> false
         }
     }
@@ -98,18 +102,18 @@ fun filterByFramework (developers: List<Developer>, framework : String) : List<D
 }
 fun devInfo(dev : Developer){
     val role : String
-    if (dev is BackendDeveloper){
+    if (dev is backendDeveloper){
         role = "Backend developer"
-    }else if (dev is FrontendDeveloper){
+    }else if (dev is frontendDeveloper){
         role = "Frontend developer"
     }else {
         role = "N/A"
     }
 
     val framework : String
-    if (dev is BackendDeveloper){
+    if (dev is backendDeveloper){
         framework = dev.backendFramework
-    }else if (dev is FrontendDeveloper){
+    }else if (dev is frontendDeveloper){
         framework = dev.frontendFramework
     }else {
         framework = "N/A"
@@ -123,11 +127,11 @@ fun devInfo(dev : Developer){
 
 fun main (){
     val developers = listOf(
-        BackendDeveloper("Emina", "Jusufovic", 5, "BA",listOf("Java", "Python"), "Ktor"),
-        FrontendDeveloper("Amila", "Residovic", 4, "US", listOf("JavaScript", "TypeScript"), "React"),
-        BackendDeveloper("Amina", "Hasic", 2, "UK",listOf("HTML", "CSS", "JavaScript"), "Vue.js" ),
-        FrontendDeveloper("Armin", "Coralic", 8, "BA", listOf("Java", "Kotlin"), "Ktor"),
-        BackendDeveloper("Adnan", "Hasic", 3, "DE", listOf("Python", "Java"), "Django"))
+        backendDeveloper("Emina", "Jusufovic", 5, "BA",listOf("Java", "Python"), "Ktor"),
+        frontendDeveloper("Amila", "Residovic", 4, "US", listOf("JavaScript", "TypeScript"), "React"),
+        backendDeveloper("Amina", "Hasic", 2, "UK",listOf("HTML", "CSS", "JavaScript"), "Vue.js" ),
+        frontendDeveloper("Armin", "Coralic", 8, "BA", listOf("Java", "Kotlin"), "Ktor"),
+        backendDeveloper("Adnan", "Hasic", 3, "DE", listOf("Python", "Java"), "Django"))
 
     println("All developers")
     developers.forEach { devInfo(it) }
