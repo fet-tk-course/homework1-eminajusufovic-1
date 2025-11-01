@@ -51,6 +51,8 @@ fun countDeveloperManual(developers: List<Developer>): Map<String, Int> {
     for (dev in developers){
         for (lang in dev.languages){
             map[lang] = map.getOrDefault(lang,0)+1
+            // Koristim getOrDefault ovdje da bih dobila vrijednost ili 0 ako ključ ne postoji.
+            // Napomena: ovu funkciju sam saznala putem ChatGPT-a jer ranije nisam znala za nju.
         }
     }
     return map
@@ -82,6 +84,17 @@ fun avgExpManual (developers: List<Developer>) : Map<String, Double> {
         avg[lang] = list.average()
 }
     return avg
+}
+
+fun filterByFramework (developers: List<Developer>, framework : String) : List<Developer>{
+    return developers.filter { dev ->
+        when (dev) {
+            is BackendDeveloper -> dev.backendFramework == framework
+            is FrontendDeveloper -> dev.frontendFramework == framework
+            else -> false
+        }
+    }
+
 }
 fun devInfo(dev : Developer){
     val role : String
@@ -118,29 +131,46 @@ fun main (){
 
     println("All developers")
     developers.forEach { devInfo(it) }
+    println("\n")
 
     println("Counting languages (groupBy)")
     val countGroupBy = countDeveloper(developers)
     for (entry in countGroupBy) {
-        println("${entry.key}: ${entry.value} developers")
+        println("${entry.key}: ${entry.value} developers ")
+
     }
+    println("\n")
 
     println("Counting languages (manual)")
     val manualDev= countDeveloperManual(developers)
     for (entry in manualDev){
         println("${entry.key}: ${entry.value} developers")
     }
+    println("\n")
+
     println("Average experience by language (groupBy)")
     val avgExp= avgExpeByLanguage(developers)
     for (entry in avgExp){
         println("${entry.key}: ${entry.value} years")
     }
+    println("\n")
 
     println("Average experience by language (manual)")
         val avgExpM = avgExpManual(developers)
         for (entry in avgExpM) {
             println("${entry.key}: ${entry.value} years")
         }
+    println("\n")
+
+    val filteredDevs = filterByFramework(developers, "Ktor")
+    println("Developers using Ktor framework:")
+    filteredDevs.forEach { devInfo(it) }
+    println("\n")
+
+    val filteredDevs1 = filterByFramework(developers, "Vue.js")
+    println("Developers using Vue.js framework:")
+    filteredDevs1.forEach { devInfo(it) }
+
 
 
 
