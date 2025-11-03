@@ -125,13 +125,34 @@ fun devInfo(dev : Developer){
 
 }
 
+//zadatak sa provjere
+
+fun languagePairs (developers : List<Developer>) : Map<List<String>, Int> {
+    return developers.groupingBy { it.languages  }
+        .eachCount()
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
 fun main (){
     val developers = listOf(
         backendDeveloper("Emina", "Jusufovic", 5, "BA",listOf("Java", "Python"), "Ktor"),
-        frontendDeveloper("Amila", "Residovic", 4, "US", listOf("JavaScript", "TypeScript"), "React"),
+        frontendDeveloper("Amila", "Residovic", 4, "US", listOf("HTML", "CSS", "JavaScript"), "React"),
         backendDeveloper("Amina", "Hasic", 2, "UK",listOf("HTML", "CSS", "JavaScript"), "Vue.js" ),
-        frontendDeveloper("Armin", "Coralic", 8, "BA", listOf("Java", "Kotlin"), "Ktor"),
-        backendDeveloper("Adnan", "Hasic", 3, "DE", listOf("Python", "Java"), "Django"))
+        frontendDeveloper("Armin", "Coralic", 8, "BA", listOf("Java", "CSS"), "Ktor"),
+        backendDeveloper("Adnan", "Hasic", 3, "DE", listOf("Java", "Python"), "Django"))
+
+
 
     println("All developers")
     developers.forEach { devInfo(it) }
@@ -174,6 +195,20 @@ fun main (){
     val filteredDevs1 = filterByFramework(developers, "Vue.js")
     println("Developers using Vue.js framework:")
     filteredDevs1.forEach { devInfo(it) }
+    println("\n")
+
+    //zadatak sa provjere
+    println ("Developeri sa istim brojem jezika")
+    val langPair = languagePairs(developers)
+
+    langPair.forEach { println("${it.key} -> ${it.value}") }
+
+
+
+
+
+
+
 
 
 
